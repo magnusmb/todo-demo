@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { AddTodoField, TodoList } from "./Todo";
+import "./App.css";
 
 function App() {
+  const someTodos = ["En todo", "Annen todo", "Tredje todo"];
+  const [todos, setTodos] = React.useState([...someTodos]);
+
+  const addTodo = (todo: string) => {
+    setTodos([...todos, todo]);
+  };
+
+  const deleteTodo = (theTodo: string) => {
+    setTodos(todos.filter((aTodo) => aTodo.localeCompare(theTodo)));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>Todo Demo</h1>
       </header>
+      <main>
+        <AddTodoField addTodo={addTodo} />
+        <TodoList todos={todos} deleteTodo={deleteTodo} />
+      </main>
     </div>
   );
 }
