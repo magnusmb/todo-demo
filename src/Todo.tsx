@@ -30,3 +30,30 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
     </ul>
   );
 };
+
+export const AddTodoField: React.FC<{ addTodo(todo: string): void }> = (
+  props
+) => {
+  const [newTodo, setNewTodo] = React.useState("");
+
+  const handleChange = (value: string) => {
+    setNewTodo(value);
+  };
+
+  const handleClick = (todo: string) => {
+    props.addTodo(todo);
+    setNewTodo("");
+  };
+
+  return (
+    <div className="todo-field">
+      <input
+        placeholder="What needs to be done?"
+        type="text"
+        value={newTodo}
+        onChange={(e) => handleChange(e.target.value)}
+      />
+      <button onClick={() => handleClick(newTodo)}>+</button>
+    </div>
+  );
+};
