@@ -1,17 +1,21 @@
 import * as React from "react";
-import { AddTodoField, TodoList } from "./Todo";
+import * as Todo from "./Todo";
+import { AddTodoField, TodoList } from "./TodoList";
 import "./App.css";
 
 function App() {
-  const someTodos = ["En todo", "Annen todo", "Tredje todo"];
-  const [todos, setTodos] = React.useState([...someTodos]);
+  const [todos, setTodos] = React.useState(Todo.getTodos());
 
   const addTodo = (todo: string) => {
-    setTodos([...todos, todo]);
+    setTodos(Todo.addTodo(todo));
   };
 
-  const deleteTodo = (theTodo: string) => {
-    setTodos(todos.filter((aTodo) => aTodo.localeCompare(theTodo)));
+  const deleteTodo = (id: string) => {
+    setTodos(Todo.deleteTodo(id));
+  };
+
+  const checkTodo = (id: string) => {
+    setTodos(Todo.checkTodo(id));
   };
 
   return (
@@ -21,7 +25,7 @@ function App() {
       </header>
       <main>
         <AddTodoField addTodo={addTodo} />
-        <TodoList todos={todos} deleteTodo={deleteTodo} />
+        <TodoList todos={todos} checkTodo={checkTodo} deleteTodo={deleteTodo} />
       </main>
     </div>
   );

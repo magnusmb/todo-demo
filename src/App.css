@@ -8,7 +8,7 @@
 }
 
 .App main {
-  width: 30vw;
+  width: 20em;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -35,4 +35,5 @@
 
 .todo-field input {
   flex-grow: 1;
+  min-width: 0;
 }
