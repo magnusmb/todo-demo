@@ -3,30 +3,47 @@ import { Todo } from "./Todo";
 
 interface TodoProps {
   todo: Todo;
-  deleteTodo(todo: string): void;
+  onDelete(todoId: string): void;
+  onToggle(todo: Todo): void;
+  onEditTodo(todo: Todo): void;
 }
 
 export const TodoItem: React.FC<TodoProps> = (props) => {
+  const todo = props.todo;
   return (
     <li>
       <label>
-        <input type="checkbox" id="todo-1" /> {props.todo.text}
+        <input
+          type="checkbox"
+          onChange={() => props.onToggle(todo)}
+          checked={todo.checked}
+          id={todo.id}
+        />{" "}
+        {todo.text}
       </label>
-      <button onClick={() => props.deleteTodo(props.todo.id)}>X</button>
+      <button onClick={() => props.onDelete(todo.id)}>x</button>
     </li>
   );
 };
 
 interface TodoListProps {
   todos: Todo[];
-  deleteTodo(todo: string): void;
+  onDeleteTodo(todoId: string): void;
+  onToggleTodo(todo: Todo): void;
+  onEditTodo(todo: Todo): void;
 }
 
 export const TodoList: React.FC<TodoListProps> = (props) => {
   return (
     <ul>
       {props.todos.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} deleteTodo={props.deleteTodo} />
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={props.onToggleTodo}
+          onDelete={props.onDeleteTodo}
+          onEditTodo={props.onEditTodo}
+        />
       ))}
     </ul>
   );
@@ -35,15 +52,15 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
 export const AddTodoField: React.FC<{ addTodo(todo: string): void }> = (
   props
 ) => {
-  const [newTodo, setNewTodo] = React.useState("");
+  const [todoInput, setTodoInput] = React.useState("");
 
   const handleChange = (value: string) => {
-    setNewTodo(value);
+    setTodoInput(value);
   };
 
   const handleClick = (todo: string) => {
     props.addTodo(todo);
-    setNewTodo("");
+    setTodoInput("");
   };
 
   return (
@@ -51,10 +68,15 @@ export const AddTodoField: React.FC<{ addTodo(todo: string): void }> = (
       <input
         placeholder="What needs to be done?"
         type="text"
-        value={newTodo}
+        value={todoInput}
         onChange={(e) => handleChange(e.target.value)}
       />
-      <button onClick={() => handleClick(newTodo)}>+</button>
+      <button
+        disabled={todoInput.length === 0}
+        onClick={() => handleClick(todoInput)}
+      >
+        +
+      </button>
     </div>
   );
 };

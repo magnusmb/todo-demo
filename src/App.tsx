@@ -6,17 +6,22 @@ import "./App.css";
 function App() {
   const [todos, setTodos] = React.useState(Todo.getTodos());
 
-  const addTodo = (todo: string) => {
-    setTodos(Todo.addTodo(todo));
+  const addTodo = (todoText: string) => {
+    Todo.addTodo(todoText);
+    setTodos(Todo.getTodos());
   };
 
   const deleteTodo = (id: string) => {
-    setTodos(Todo.deleteTodo(id));
+    Todo.deleteTodo(id);
+    setTodos(Todo.getTodos());
   };
 
-  const checkTodo = (id: string) => {
-    setTodos(Todo.checkTodo(id));
+  const toggleTodo = (todo: { id: string; checked: boolean }) => {
+    Todo.editTodo({ id: todo.id, checked: !todo.checked });
+    setTodos(Todo.getTodos());
   };
+
+  const editTodo = () => undefined;
 
   return (
     <div className="App">
@@ -25,7 +30,12 @@ function App() {
       </header>
       <main>
         <AddTodoField addTodo={addTodo} />
-        <TodoList todos={todos} checkTodo={checkTodo} deleteTodo={deleteTodo} />
+        <TodoList
+          todos={todos}
+          onToggleTodo={toggleTodo}
+          onEditTodo={editTodo}
+          onDeleteTodo={deleteTodo}
+        />
       </main>
     </div>
   );
