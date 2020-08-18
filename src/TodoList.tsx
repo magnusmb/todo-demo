@@ -3,32 +3,41 @@ import { Todo } from "./Todo";
 
 interface TodoProps {
   todo: Todo;
-  onDelete(todoId: string): void;
+  onRemove(todoId: string): void;
   onToggle(todo: Todo): void;
   onEditTodo(todo: Todo): void;
 }
 
 export const TodoItem: React.FC<TodoProps> = (props) => {
   const todo = props.todo;
+  const [isChecked, setIsChecked] = React.useState(todo.checked);
+
+  const handleCheck = (checked: boolean) => {
+    props.onToggle({ id: todo.id, text: todo.text, checked: checked });
+    setIsChecked(checked);
+  };
+
   return (
     <li>
       <label>
         <input
           type="checkbox"
-          onChange={() => props.onToggle(todo)}
-          checked={todo.checked}
+          onChange={(e) => handleCheck(e.target.checked)}
+          checked={isChecked}
           id={todo.id}
         />{" "}
         {todo.text}
       </label>
-      <button onClick={() => props.onDelete(todo.id)}>x</button>
+      <button onClick={() => props.onRemove(todo.id)} className="delete">
+        x
+      </button>
     </li>
   );
 };
 
 interface TodoListProps {
   todos: Todo[];
-  onDeleteTodo(todoId: string): void;
+  onRemoveTodo(todoId: string): void;
   onToggleTodo(todo: Todo): void;
   onEditTodo(todo: Todo): void;
 }
@@ -41,7 +50,7 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
           key={todo.id}
           todo={todo}
           onToggle={props.onToggleTodo}
-          onDelete={props.onDeleteTodo}
+          onRemove={props.onRemoveTodo}
           onEditTodo={props.onEditTodo}
         />
       ))}

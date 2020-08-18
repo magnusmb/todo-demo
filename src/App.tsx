@@ -1,25 +1,37 @@
 import * as React from "react";
-import * as Todo from "./Todo";
+import { Todo, deleteTodo, newTodo, updateTodo } from "./Todo";
 import { AddTodoField, TodoList } from "./TodoList";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = React.useState(Todo.getTodos());
+  const [todos, setTodos] = React.useState<Todo[]>([]);
 
-  const addTodo = (todoText: string) => {
-    Todo.addTodo(todoText);
-    setTodos(Todo.getTodos());
-  };
+  const addTodo = React.useCallback(
+    (todoText: string) => {
+      const updatedTodos = newTodo(todoText);
+      setTodos(updatedTodos);
+    },
+    [setTodos]
+  );
 
-  const deleteTodo = (id: string) => {
-    Todo.deleteTodo(id);
-    setTodos(Todo.getTodos());
-  };
+  const removeTodo = React.useCallback(
+    (id: string) => {
+      const updatedTodos = deleteTodo(id);
+      setTodos(updatedTodos);
+    },
+    [setTodos]
+  );
 
-  const toggleTodo = (todo: { id: string; checked: boolean }) => {
-    Todo.editTodo({ id: todo.id, checked: !todo.checked });
-    setTodos(Todo.getTodos());
-  };
+  const toggleTodo = React.useCallback(
+    (todo: { id: string; checked: boolean }) => {
+      const updatedTodos = updateTodo({
+        id: todo.id,
+        checked: !todo.checked,
+      });
+      setTodos(updatedTodos);
+    },
+    []
+  );
 
   const editTodo = () => undefined;
 
@@ -34,7 +46,7 @@ function App() {
           todos={todos}
           onToggleTodo={toggleTodo}
           onEditTodo={editTodo}
-          onDeleteTodo={deleteTodo}
+          onRemoveTodo={removeTodo}
         />
       </main>
     </div>
